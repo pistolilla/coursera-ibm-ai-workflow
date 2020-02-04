@@ -129,15 +129,8 @@ def model_load(prefix='sl',data_dir=None,training=True):
 
     if not data_dir:
         data_dir = os.path.join(PARENT_DIR,"cs-train")
-    
-    models = [f for f in os.listdir(MODEL_DIR) if re.search("sl",f)]
 
-    if len(models) == 0:
-        raise Exception("Models with prefix '{}' cannot be found did you train?".format(prefix))
-
-    all_models = {}
-    for model in models:
-        all_models[re.split("-",model)[1]] = joblib.load(os.path.join(MODEL_DIR,model))
+    all_models = model_load_only(prefix=prefix)
 
     ## load data
     ts_data = fetch_ts(data_dir)
@@ -149,7 +142,16 @@ def model_load(prefix='sl',data_dir=None,training=True):
         
     return(all_data, all_models)
 
-def model_predict(country,year,month,day,all_models=None,test=False):
+def model_load_only(prefix='sl'):
+    models = [f for f in os.listdir(MODEL_DIR) if re.search(prefix,f)]
+    if len(models) == 0:
+        raise Exception("Models with prefix '{}' cannot be found did you train?".format(prefix))
+    all_models = {}
+    for model in models:
+        all_models[re.split("-",model)[1]] = joblib.load(os.path.join(MODEL_DIR,model))
+    return all_models
+
+def model_predict(country,year,month,day,all_models=None,all_data=None,test=False):
     """
     example funtion to predict from model
     """
@@ -158,7 +160,7 @@ def model_predict(country,year,month,day,all_models=None,test=False):
     time_start = time.time()
 
     ## load model if needed
-    if not all_models:
+    if not all_data and not all_models:
         all_data,all_models = model_load(training=False)
     
     ## input checks

@@ -34,7 +34,7 @@ class ModelTest(unittest.TestCase):
         """
                         
         ## load the model
-        _, all_models = model_load()
+        all_models = model_load_only()
         models_loaded = list(all_models.keys())
         models_indir = [f for f in os.listdir(MODEL_DIR) if re.search("sl",f)]
         # were all models loaded?
