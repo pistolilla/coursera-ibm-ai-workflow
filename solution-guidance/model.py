@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 
-from logger import update_predict_log, update_train_log
+#from logger import update_predict_log, update_train_log
 from cslib import fetch_ts, engineer_features
 
 ## model specific variables (iterate the version and note with each change)
@@ -79,9 +79,8 @@ def _model_train(df,tag,test=False):
     runtime = "%03d:%02d:%02d"%(h, m, s)
 
     ## update log
-    update_train_log(tag,(str(dates[0]),str(dates[-1])),{'rmse':eval_rmse},runtime,
-                     MODEL_VERSION, MODEL_VERSION_NOTE,test=True)
-  
+    #update_train_log(tag,(str(dates[0]),str(dates[-1])),{'rmse':eval_rmse},runtime,MODEL_VERSION, MODEL_VERSION_NOTE,test=True)
+
 
 def model_train(data_dir,test=False):
     """
@@ -117,7 +116,7 @@ def model_load(prefix='sl',data_dir=None,training=True):
     """
 
     if not data_dir:
-        data_dir = os.path.join("..","data","cs-train")
+        data_dir = os.path.join("..","cs-train")
     
     models = [f for f in os.listdir(os.path.join(".","models")) if re.search("sl",f)]
 
@@ -190,8 +189,7 @@ def model_predict(country,year,month,day,all_models=None,test=False):
     runtime = "%03d:%02d:%02d"%(h, m, s)
 
     ## update predict log
-    update_predict_log(country,y_pred,y_proba,target_date,
-                       runtime, MODEL_VERSION, test=test)
+    #update_predict_log(country,y_pred,y_proba,target_date,runtime, MODEL_VERSION, test=test)
     
     return({'y_pred':y_pred,'y_proba':y_proba})
 
@@ -203,8 +201,8 @@ if __name__ == "__main__":
 
     ## train the model
     print("TRAINING MODELS")
-    data_dir = os.path.join("..","data","cs-train")
-    model_train(data_dir,test=True)
+    data_dir = os.path.join("..","cs-train")
+    model_train(data_dir,test=False)
 
     ## load the model
     print("LOADING MODELS")
