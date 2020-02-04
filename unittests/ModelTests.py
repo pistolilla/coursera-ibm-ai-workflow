@@ -4,7 +4,7 @@ model tests
 """
 
 
-import unittest,os,sys
+import unittest,os,sys,random
 ## import model specific functions and variables
 THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 PARENT_DIR = os.path.dirname(THIS_DIR)
@@ -22,16 +22,26 @@ class ModelTest(unittest.TestCase):
         """
 
         ## train the model
-        model_train()
-        self.assertTrue(os.path.exists(SAVED_MODEL))
+        data_dir = os.path.join(PARENT_DIR,"cs-train")
+        model_train(data_dir,test=True,regressor="randomforest")
+        models = [f for f in os.listdir(MODEL_DIR) if re.search("test",f)]
+        #print(models)
+        self.assertTrue(len(models) >=  2)
 
     def test_02_load(self):
         """
-        test the train functionality
+        test the load functionality
         """
                         
         ## load the model
-        model = model_load()
+        _, all_models = model_load()
+        models_loaded = list(all_models.keys())
+        models_indir = [f for f in os.listdir(MODEL_DIR) if re.search("sl",f)]
+        # were all models loaded?
+        self.assertTrue(len(models_loaded) == len(models_indir))
+
+        # take a random model and ensure it has methods
+        model = all_models[random.choice(models_loaded)]
         self.assertTrue('predict' in dir(model))
         self.assertTrue('fit' in dir(model))
 
@@ -39,15 +49,14 @@ class ModelTest(unittest.TestCase):
         """
         test the predict functionality
         """
-
-        ## load model first
-        model = model_load()
-        
         ## example predict
-        for query in [np.array([[6.1,2.8]]), np.array([[7.7,2.5]]), np.array([[5.8,3.8]])]:
-            result = model_predict(query,model)
-            y_pred = result['y_pred']
-            self.assertTrue(y_pred in [0,1,2])
+        country='all'
+        year='2018'
+        month='01'
+        day='05'
+        result = model_predict(country,year,month,day,test=True)
+        print(result)
+        self.assertTrue(180000 <= result['y_pred'][0] <= 200000)
 
         
 ### Run the tests

@@ -226,11 +226,3 @@ if __name__ == "__main__":
     print("LOADING MODELS")
     all_data, all_models = model_load()
     print("... models loaded: ",",".join(all_models.keys()))
-
-    ## test predict
-    country='all'
-    year='2018'
-    month='01'
-    day='05'
-    result = model_predict(country,year,month,day,test=True)
-    print(result)
