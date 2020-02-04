@@ -1,15 +1,18 @@
-# Solution for AI in Production Course (Coursera)
+# Solution for *AI in Production* (coursera.org)
 
-## Instructions
+## 1. Running the application
+
+## 2. Running tests
+
+## 3. Training the model
 
 ### A script is available to automate the ingestion (and re-train all models):
 ```
-cd solution-guidance/
-python model.py
+python solution_guidance/model.py
 ```
 it takes [Random Forest Regression](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html) by default, however [Extra Trees Regression](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.ExtraTreesRegressor.html) is also available as an option when adding the following argument:
 ```
-python model.py extratrees
+python solution_guidance/model.py extratrees
 ```
 
 Course link: [learn/ibm-ai-workflow-ai-production](https://www.coursera.org/learn/ibm-ai-workflow-ai-production)

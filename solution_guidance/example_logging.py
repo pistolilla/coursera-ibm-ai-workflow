@@ -7,6 +7,9 @@ a machine learning model to enable performance monitoring
 import time,os,re,csv,sys,uuid,joblib
 from datetime import date
 
+THIS_DIR = os.path.dirname(os.path.realpath(__file__))
+PARENT_DIR = os.path.dirname(THIS_DIR)
+
 def _update_predict_log(country,y_pred,y_proba,query,runtime,MODEL_VERSION,test=False):
     """
     update predict log file
@@ -14,7 +17,7 @@ def _update_predict_log(country,y_pred,y_proba,query,runtime,MODEL_VERSION,test=
 
     ## name the logfile using something that cycles with date (day, month, year)    
     today = date.today()
-    logdir = os.path.join("..","logs")
+    logdir = os.path.join(PARENT_DIR,"logs")
     logfile = os.path.join(logdir, "example-predict-{}-{}.log.csv".format(today.year, today.month))
 
     ## write the data to a csv file    

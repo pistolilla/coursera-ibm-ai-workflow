@@ -15,7 +15,11 @@ from example_logging import _update_predict_log
 from cslib import fetch_ts, engineer_features
 
 ## model specific variables (iterate the version and note with each change)
-MODEL_DIR = "models"
+THIS_DIR = os.path.dirname(os.path.realpath(__file__))
+PARENT_DIR = os.path.dirname(THIS_DIR)
+MODEL_DIR = os.path.join(THIS_DIR, "models")
+print("this dir", THIS_DIR)
+print("parent", PARENT_DIR)
 MODEL_VERSION = 0.1
 MODEL_VERSION_NOTE = "supervised learing model for time-series"
 
@@ -124,16 +128,16 @@ def model_load(prefix='sl',data_dir=None,training=True):
     """
 
     if not data_dir:
-        data_dir = os.path.join("..","cs-train")
+        data_dir = os.path.join(PARENT_DIR,"cs-train")
     
-    models = [f for f in os.listdir(os.path.join(".","models")) if re.search("sl",f)]
+    models = [f for f in os.listdir(MODEL_DIR) if re.search("sl",f)]
 
     if len(models) == 0:
         raise Exception("Models with prefix '{}' cannot be found did you train?".format(prefix))
 
     all_models = {}
     for model in models:
-        all_models[re.split("-",model)[1]] = joblib.load(os.path.join(".","models",model))
+        all_models[re.split("-",model)[1]] = joblib.load(os.path.join(MODEL_DIR,model))
 
     ## load data
     ts_data = fetch_ts(data_dir)
@@ -215,7 +219,7 @@ if __name__ == "__main__":
 
     ## train the model
     print("TRAINING MODELS")
-    data_dir = os.path.join("..","cs-train")
+    data_dir = os.path.join(PARENT_DIR,"cs-train")
     model_train(data_dir,test=False,regressor=regressor)
 
     ## load the model

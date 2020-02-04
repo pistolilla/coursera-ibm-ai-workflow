@@ -19,6 +19,8 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
 COLORS = ["darkorange","royalblue","slategrey"]
+THIS_DIR = os.path.dirname(os.path.realpath(__file__))
+PARENT_DIR = os.path.dirname(THIS_DIR)
 
 def fetch_data(data_dir):
     """
@@ -222,7 +224,7 @@ def engineer_features(df,training=True):
 if __name__ == "__main__":
 
     run_start = time.time() 
-    data_dir = os.path.join("..","cs-train")
+    data_dir = os.path.join(PARENT_DIR,"cs-train")
     print("...fetching data")
 
     ts_all = fetch_ts(data_dir,clean=False)
