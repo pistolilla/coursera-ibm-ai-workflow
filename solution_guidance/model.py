@@ -11,6 +11,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 
 #from logger import update_predict_log, update_train_log
+from example_logging import _update_predict_log
 from cslib import fetch_ts, engineer_features
 
 ## model specific variables (iterate the version and note with each change)
@@ -196,7 +197,7 @@ def model_predict(country,year,month,day,all_models=None,test=False):
     runtime = "%03d:%02d:%02d"%(h, m, s)
 
     ## update predict log
-    #update_predict_log(country,y_pred,y_proba,target_date,runtime, MODEL_VERSION, test=test)
+    _update_predict_log(country,y_pred,y_proba,target_date,runtime, MODEL_VERSION, test=test)
     
     return({'y_pred':y_pred,'y_proba':y_proba})
 
@@ -227,5 +228,5 @@ if __name__ == "__main__":
     year='2018'
     month='01'
     day='05'
-    result = model_predict(country,year,month,day)
+    result = model_predict(country,year,month,day,test=True)
     print(result)
