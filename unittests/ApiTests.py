@@ -18,10 +18,11 @@ import re
 from ast import literal_eval
 import numpy as np
 
+server = "localhost"
 port = 8080
 
 try:
-    requests.post('http://0.0.0.0:{}/predict'.format(port))
+    requests.post('http://{}:{}/predict'.format(server, port))
     server_available = True
 except:
     server_available = False
@@ -39,11 +40,11 @@ class ApiTest(unittest.TestCase):
         """
     
         ## provide no data at all 
-        r = requests.post('http://0.0.0.0:{}/predict'.format(port))
+        r = requests.post('http://{}:{}/predict'.format(server, port))
         self.assertEqual(re.sub('\n|"','',r.text),"[]")
 
         ## provide improperly formatted data
-        r = requests.post('http://0.0.0.0:{}/predict'.format(port),json={"key":"value"})     
+        r = requests.post('http://{}:{}/predict'.format(server, port),json={"key":"value"})     
         self.assertEqual(re.sub('\n|"','',r.text),"[]")
     
     @unittest.skipUnless(server_available,"local server is not running")
@@ -57,7 +58,7 @@ class ApiTest(unittest.TestCase):
         query_type = 'numpy'
         request_json = {'query':query_data,'type':query_type}
 
-        r = requests.post('http://0.0.0.0:{}/predict'.format(port),json=request_json)
+        r = requests.post('http://{}:{}/predict'.format(server, port),json=request_json)
         response = literal_eval(r.text)
         self.assertEqual(response['y_pred'],[1])
 
@@ -68,7 +69,7 @@ class ApiTest(unittest.TestCase):
         """
       
         request_json = {'mode':'test'}
-        r = requests.post('http://0.0.0.0:{}/train'.format(port),json=request_json)
+        r = requests.post('http://{}:{}/train'.format(server, port),json=request_json)
         train_complete = re.sub("\W+","",r.text)
         self.assertEqual(train_complete,'true')
 
