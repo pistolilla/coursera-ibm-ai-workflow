@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from sklearn import svm
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
@@ -18,7 +18,7 @@ MODEL_DIR = "models"
 MODEL_VERSION = 0.1
 MODEL_VERSION_NOTE = "supervised learing model for time-series"
 
-def _model_train(df,tag,test=False):
+def _model_train(df,tag,test=False,regressor=None):
     """
     example funtion to train model
     
@@ -27,7 +27,14 @@ def _model_train(df,tag,test=False):
         (2) specifies that the use of the 'test' log file 
 
     """
-
+    # Models available for training
+    regressorsList = {
+        'randomforest': RandomForestRegressor(),
+        'extratrees': ExtraTreesRegressor()
+    }
+    if regressor.lower() not in regressorsList.keys():
+        raise Exception("Regressor with name '{}' not found (available: {})".format(regressor, ', '.join(regressorsList.keys())))
+    regressor = regressor.lower() # match is case insensitive
 
     ## start timer for runtime
     time_start = time.time()
@@ -46,14 +53,14 @@ def _model_train(df,tag,test=False):
     ## Perform a train-test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25,
                                                         shuffle=True, random_state=42)
-    ## train a random forest model
+    ## train a regression model
     param_grid_rf = {
-    'rf__criterion': ['mse','mae'],
-    'rf__n_estimators': [10,15,20,25]
+    'reg__criterion': ['mse','mae'],
+    'reg__n_estimators': [10,15,20,25]
     }
 
     pipe_rf = Pipeline(steps=[('scaler', StandardScaler()),
-                              ('rf', RandomForestRegressor())])
+                              ('reg', regressorsList[regressor])])
     
     grid = GridSearchCV(pipe_rf, param_grid=param_grid_rf, cv=5, iid=False, n_jobs=-1)
     grid.fit(X_train, y_train)
@@ -82,7 +89,7 @@ def _model_train(df,tag,test=False):
     #update_train_log(tag,(str(dates[0]),str(dates[-1])),{'rmse':eval_rmse},runtime,MODEL_VERSION, MODEL_VERSION_NOTE,test=True)
 
 
-def model_train(data_dir,test=False):
+def model_train(data_dir,test=False,regressor=None):
     """
     funtion to train model given a df
     
@@ -106,7 +113,7 @@ def model_train(data_dir,test=False):
         if test and country not in ['all','united_kingdom']:
             continue
         
-        _model_train(df,country,test=test)
+        _model_train(df,country,test=test,regressor=regressor)
     
 def model_load(prefix='sl',data_dir=None,training=True):
     """
@@ -198,11 +205,17 @@ if __name__ == "__main__":
     """
     basic test procedure for model.py
     """
+    regressor='randomforest' # Default model
+    # Optional override of regressor
+    try:
+        regressor = sys.argv[1]
+    except:
+        pass
 
     ## train the model
     print("TRAINING MODELS")
     data_dir = os.path.join("..","cs-train")
-    model_train(data_dir,test=False)
+    model_train(data_dir,test=False,regressor=regressor)
 
     ## load the model
     print("LOADING MODELS")
