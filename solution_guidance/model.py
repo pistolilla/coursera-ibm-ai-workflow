@@ -10,16 +10,16 @@ from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 
-#from logger import update_predict_log, update_train_log
+THIS_DIR = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(THIS_DIR)
+
 from example_logging import _update_predict_log
 from cslib import fetch_ts, engineer_features
 
-## model specific variables (iterate the version and note with each change)
-THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 PARENT_DIR = os.path.dirname(THIS_DIR)
 MODEL_DIR = os.path.join(THIS_DIR, "models")
-print("this dir", THIS_DIR)
-print("parent", PARENT_DIR)
+
+## model specific variables (iterate the version and note with each change)
 MODEL_VERSION = 0.1
 MODEL_VERSION_NOTE = "supervised learing model for time-series"
 

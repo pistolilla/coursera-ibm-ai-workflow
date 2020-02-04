@@ -9,8 +9,8 @@ import pandas as pd
 import os
 
 ## import model specific functions and variables
-from model import model_train, model_load, model_predict
-from model import MODEL_VERSION, MODEL_VERSION_NOTE
+from solution_guidance.model import model_train, model_load, model_predict
+from solution_guidance.model import MODEL_VERSION, MODEL_VERSION_NOTE
 
 app = Flask(__name__)
 
@@ -110,5 +110,5 @@ if __name__ == '__main__':
     if args["debug"]:
         app.run(debug=True, port=8080)
     else:
-        app.run(host='0.0.0.0', threaded=True ,port=8080)
+        app.run(threaded=True ,port=8080)
 
