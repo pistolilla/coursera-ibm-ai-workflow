@@ -11,12 +11,12 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 
 THIS_DIR = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(THIS_DIR)
-
-from example_logging import _update_predict_log
-from cslib import fetch_ts, engineer_features
-
 PARENT_DIR = os.path.dirname(THIS_DIR)
+sys.path.append(PARENT_DIR)
+
+from solution_guidance.example_logging import _update_predict_log
+from solution_guidance.cslib import fetch_ts, engineer_features
+
 MODEL_DIR = os.path.join(THIS_DIR, "models")
 
 ## model specific variables (iterate the version and note with each change)

@@ -4,9 +4,12 @@ model tests
 """
 
 
-import unittest
+import unittest,os,sys
 ## import model specific functions and variables
-from model import *
+THIS_DIR = os.path.dirname(os.path.realpath(__file__))
+PARENT_DIR = os.path.dirname(THIS_DIR)
+sys.path.append(PARENT_DIR)
+from solution_guidance.model import *
 
 class ModelTest(unittest.TestCase):
     """
