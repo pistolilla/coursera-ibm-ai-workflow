@@ -17,7 +17,7 @@ def _update_predict_log(country,y_pred,y_proba,query,runtime,MODEL_VERSION,test=
 
     ## name the logfile using something that cycles with date (day, month, year)    
     today = date.today()
-    logdir = os.path.join(PARENT_DIR,"logs")
+    logdir = os.path.join(PARENT_DIR,"static","logs")
     logfile = os.path.join(logdir, "example-predict-{}-{}.log.csv".format(today.year, today.month))
 
     ## write the data to a csv file    

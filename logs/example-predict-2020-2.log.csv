@@ -1,4 +1,0 @@
-unique_id,country,timestamp,y_pred,y_proba,target_date,model_version,runtime,test
-9a1b1e2e-c517-4e50-a143-0e1b1d5bc2c7,all,1580832513.9705923,[184271.4835],None,2018-01-05,0.1,000:00:39,True
-59ca5110-fd28-4030-9bcf-2c27f3da1863,all,1580832628.5631466,[184271.4835],None,2018-01-05,0.1,000:00:40,True
-fabaab7c-46a6-4fda-ba60-bd21c956f4d5,all,1580842845.725535,[183731.6908],None,2018-01-05,0.1,000:00:43,True
