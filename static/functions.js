@@ -10,5 +10,5 @@ $.ajaxError = function(jqxhr, textStatus, error) {
     // hiding gif
     $("#resultsgif").hide();
     $("#results").empty();
-    $("#results").append('<p>An error ocurred, please see log (' + err + ')</p>');
+    $("#results").append('<p>An error ocurred, please see console (' + err + ')</p>');
 }
