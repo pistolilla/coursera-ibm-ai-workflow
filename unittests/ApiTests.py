@@ -13,13 +13,18 @@ curl -X POST -H "Content-Type: application/json" -d "%s" http://localhost:8080/p
 import sys
 import os
 import unittest
-import requests
+import requests, json
 import re
 from ast import literal_eval
 import numpy as np
 
-server = "localhost"
-port = 8080
+# Ensuring consistency among modules
+THIS_DIR = os.path.dirname(os.path.realpath(__file__))
+PARENT_DIR = os.path.dirname(THIS_DIR)
+sys.path.append(PARENT_DIR)
+from app import HOST, PORT
+server = HOST
+port = PORT
 
 try:
     requests.post('http://{}:{}/predict'.format(server, port))
@@ -34,17 +39,24 @@ class ApiTest(unittest.TestCase):
     """
     
     @unittest.skipUnless(server_available,"local server is not running")
-    def test_predict_empty(self):
+    def test_predict_badrequest(self):
         """
         ensure appropriate failure types
         """
     
         ## provide no data at all 
-        r = requests.post('http://{}:{}/predict'.format(server, port))
+        r = requests.get('http://{}:{}/predict'.format(server, port))
+        self.assertTrue(int(r.status_code) == 400)
         self.assertEqual(re.sub('\n|"','',r.text),"[]")
 
         ## provide improperly formatted data
-        r = requests.post('http://{}:{}/predict'.format(server, port),json={"key":"value"})     
+        r = requests.get('http://{}:{}/predict?target_date={}'.format(server, port, "06-30-2019"))
+        self.assertTrue(int(r.status_code) == 400)
+        self.assertEqual(re.sub('\n|"','',r.text),"[]")
+
+        ## provide target_date not in range (2017-11-29,2019-06-30)
+        r = requests.get('http://{}:{}/predict?target_date={}'.format(server, port, "2015-03-02"))
+        self.assertTrue(int(r.status_code) == 400)
         self.assertEqual(re.sub('\n|"','',r.text),"[]")
     
     @unittest.skipUnless(server_available,"local server is not running")
@@ -53,25 +65,22 @@ class ApiTest(unittest.TestCase):
         test the predict functionality
         """
       
-        query_data = np.array([[6.1,2.8]])
-        query_data = query_data.tolist()
-        query_type = 'numpy'
-        request_json = {'query':query_data,'type':query_type}
-
-        r = requests.post('http://{}:{}/predict'.format(server, port),json=request_json)
-        response = literal_eval(r.text)
-        self.assertEqual(response['y_pred'],[1])
+        r = requests.get('http://{}:{}/predict?target_date={}'.format(server, port, "2018-02-17"))
+        txt = r.text
+        response = json.loads(txt)
+        self.assertTrue(int(r.status_code) == 200)
+        self.assertTrue(160000 < response['y_pred'][0] < 200000)
 
     @unittest.skipUnless(server_available,"local server is not running")
     def test_train(self):
         """
-        test the predict functionality
+        test the train functionality
         """
       
         request_json = {'mode':'test'}
-        r = requests.post('http://{}:{}/train'.format(server, port),json=request_json)
-        train_complete = re.sub("\W+","",r.text)
-        self.assertEqual(train_complete,'true')
+        r = requests.get('http://{}:{}/train?regressor={}'.format(server, port, "randomforest"))
+        self.assertTrue(int(r.status_code) == 200)
+        self.assertTrue('true' in r.text)
 
 ### Run the tests
 if __name__ == '__main__':
