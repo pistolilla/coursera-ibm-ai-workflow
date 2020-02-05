@@ -98,6 +98,9 @@ def train():
     try:
         model_train(data_dir,test=True,regressor=regressor)
         print("... training complete")
+        # reload models and data after re-train
+        print("... reloading models in cache")
+        global_data,global_models = model_load(training=False)
         return(jsonify(True))
     except Exception as e:
         print("ERROR API (train): model_train returned: {}".format(str(e)))
