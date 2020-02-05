@@ -1,18 +1,57 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<!-- content -->
 <div class="container m-2">
     <div class="row">
-            <div class="card border-primary mb-3" style="max-width: 20rem;">
-                <div class="card-header">Time Series Analysis</div>
-                <div class="card-body">
-                    <h4 class="card-title"><a href="/bigoven/diets">Predict Revenue</a></h4>
-                    <p class="card-text">Choose a date and a country</p>
-                </div>
+        <div class="card border-primary mb-3 mr-2" style="max-width: 20rem;">
+            <div class="card-header">Time Series Analysis</div>
+            <div class="card-body">
+                <h4 class="card-title">Predict Revenue</h4>
+                <p class="card-text">Choose a date and a country to predict the total revenue <br/>(Restricted timespan: <b>2017/11/29 - 2019/06/30</b>)</p>
+                <select id="country" class="form-control">
+                    <option value="all">(all)</option>
+                    <option value="eire">Éire</option>
+                    <option value="france">France</option>
+                    <option value="germany">Germany</option>
+                    <option value="hong_kong">Hong Kong</option>
+                    <option value="netherlands">Netherlands</option>
+                    <option value="norway">Norway</option>
+                    <option value="portugal">Portugal</option>
+                    <option value="singapore">Singapore</option>
+                    <option value="spain">Spain</option>
+                    <option value="united_kingdom">United Kingdom</option>
+                </select>
+                <input class="form-control" type="date" id="dateinput" name="dateinput" value="2018-01-29" min="2017-11-29" max="2019-06-30">
+                <button id="predictbutton" type="button" class="btn btn-info btn-md btn-block">Predict</button>
             </div>
+        </div>
+
+        <div class="card border-primary mb-3 mr-2" style="max-width: 20rem;">
+            <div class="card-header">Model Evaluation</div>
+            <div class="card-body">
+                <h4 class="card-title">(Re)Train Model</h4>
+                <p class="card-text">Choose a regressor and train the model with different parameters</p>
+                <select id="regressor" class="form-control">
+                    <option value="randomforest">Random Forest</option>
+                    <option value="extratrees">Extra Trees</option>
+                </select>
+                <button id="modelbutton" type="button" class="btn btn-info btn-md btn-block">Reload and Fit</button>
+            </div>
+        </div>
+
+        <div class="card border-primary mb-3 mr-0" style="min-width: 20rem; max-width: 20rem;">
+            <div class="card-header">Output</div>
+            <div class="card-body">
+                <img id="resultsgif" class="loadinggif" src="https://cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif" loop="infinite" />
+                <div id="results"><p class="m-1">No response</p></div>
+            </div>
+        </div>
     </div>
 </div>
 
+<script src="{{ url_for('static', filename='index.js') }}"></script>
 {% endblock %}
 
 

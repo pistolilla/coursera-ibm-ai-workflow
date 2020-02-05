@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- content -->
+<div class="container m-2">
+    <div class="row">
+        <ul id="logslist">
+        </ul>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='logs.js') }}"></script>
+
+{% endblock %}

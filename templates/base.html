@@ -5,6 +5,7 @@
         <title>AAVAIL Business Intelligence</title>
         <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootswatch/4.3.1/simplex/bootstrap.min.css">
         <link href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <script src="{{ url_for('static', filename='functions.js') }}"></script>
@@ -25,19 +26,26 @@
 
     <!-- navigation bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a href="/" class="navbar-brand">AAVAIL</a>
+        <a href="/" class="navbar-brand">AAVAIL Business Intelligence</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav navbar-left">
-                <li class="nav-item"><a class="nav-link" href="?about=1">About</a></li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="?about=1">API docs</a></li>
+                <li class="nav-item"><a class="nav-link" href="/logs">Log files</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">API docs</a></li>
+                <li class="nav-item"><a class="nav-link" href="?about=1">About</a></li>
             </ul>
         </div>
     </nav>
+
+    <!-- about box -->
+    <div id="aboutbox" class="alert alert-dismissible alert-primary m-2">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        AI Workflow: AI in Production Capstone Project. For more info visit the <a href="https://github.com/pistolilla/coursera-ibm-ai-workflow" target="_blank">github page</a> for this application. Open source: <a href="https://github.com/pistolilla/coursera-ibm-ai-workflow/blob/master/LICENSE" target="_blank">MIT License</a>.
+    </div>
 
     {% block content %}{% endblock %}
 

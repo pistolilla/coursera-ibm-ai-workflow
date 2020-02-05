@@ -1,5 +1,5 @@
 import argparse
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask import render_template
 import joblib
 import socket
@@ -13,9 +13,14 @@ from solution_guidance.model import model_train, model_load, model_predict
 from solution_guidance.model import MODEL_VERSION, MODEL_VERSION_NOTE
 
 THIS_DIR = os.path.dirname(os.path.realpath(__file__))
+LOGS_DIR = os.path.join(THIS_DIR, "static", "logs")
 HOST = "127.0.0.1"
 PORT = 8080
 app = Flask(__name__)
+
+@app.route('/log/<path:path>')
+def send_js(path):
+    return send_from_directory(LOGS_DIR, path)
 
 @app.before_first_request
 def startup():
@@ -28,17 +33,14 @@ def startup():
 def landing():
     return render_template('index.html')
 
-@app.route('/index')
-def index():
-    return render_template('index.html')
+@app.route("/logs")
+def logs():
+    return render_template('logs.html')
 
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
-
-@app.route('/running', methods=['POST'])
-def running():
-    return render_template('running.html')
+@app.route("/logslist")
+def logslist():
+    files = [f for f in os.listdir(LOGS_DIR)]
+    return jsonify(files)
 
 @app.route('/predict')
 def predict():
