@@ -68,6 +68,7 @@ def _model_train(df,tag,test=False,regressor=None):
                               ('reg', regressorsList[regressor])])
     
     grid = GridSearchCV(pipe_rf, param_grid=param_grid_rf, cv=5, iid=False, n_jobs=-1)
+    print("... using model: {}".format(regressor))
     grid.fit(X_train, y_train)
     y_pred = grid.predict(X_test)
     eval_rmse =  round(np.sqrt(mean_squared_error(y_test,y_pred)))
